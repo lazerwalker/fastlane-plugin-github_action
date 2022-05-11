@@ -161,6 +161,10 @@ module Fastlane
         UI.message("Created Deploy Key")
         
         sleep(3)
+
+        if params[:output_private_key_to_env]
+          ENV[match_deploy_key] = k.private_key
+        end
        
         secrets = {}
         secrets[match_deploy_key] = k.private_key  
@@ -339,6 +343,11 @@ module Fastlane
                                            UI.user_error!("Path #{value} doesn't exist") unless File.exist?(value)
                                          end 
                                        end),
+          FastlaneCore::ConfigItem.new(key: :output_private_key_to_env,
+                                       env_name: "FL_OUTPUT_PRIVATE_KEY_TO_ENV",
+                                       description: "Determines whether the private key is stored in ENV",
+                                       default_value: false,
+                                       type: Boolean),
         ]
       end
 
